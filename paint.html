@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Art</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    #pixel-container {
+      display: grid;
+      grid-template-columns: repeat(50, 10px);
+      gap: 1px;
+    }
+
+    .pixel {
+      width: 10px;
+      height: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    #color-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .color {
+      width: 20px;
+      height: 20px;
+      margin: 2px;
+      cursor: pointer;
+    }
+
+    #tools-container {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .tool {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <div id="pixel-container"></div>
+  <div id="color-container"></div>
+  <div id="tools-container"></div>
+</div>
+
+<script>
+  const pixelContainer = document.getElementById('pixel-container');
+  const colorContainer = document.getElementById('color-container');
+  const toolsContainer = document.getElementById('tools-container');
+
+  const colors = [
+    '#ff0000', '#ff4000', '#ff8000', '#ffbf00',
+    '#ffff00', '#bfff00', '#80ff00', '#40ff00',
+    '#00ff00', '#00ff40', '#00ff80', '#00ffbf',
+    '#00ffff', '#00bfff', '#0080ff', '#0040ff',
+    '#0000ff', '#4000ff', '#8000ff', '#bf00ff',
+    '#ff00ff', '#ff00bf', '#ff0080', '#ff0040',
+    '#ffffff', '#cccccc', '#999999', '#666666',
+    '#333333', '#000000', '#ffcc00', '#ccff00',
+    '#00ccff', '#ff6666', '#99cc99', '#996699'
+  ];
+
+  let selectedColor = colors[0];
+
+  function createPixel() {
+    const pixel = document.createElement('div');
+    pixel.className = 'pixel';
+    pixel.addEventListener('mouseover', paintPixel);
+    pixelContainer.appendChild(pixel);
+  }
+
+  function createColor(color) {
+    const colorDiv = document.createElement('div');
+    colorDiv.className = 'color';
+    colorDiv.style.backgroundColor = color;
+    colorDiv.addEventListener('click', () => selectColor(color));
+    colorContainer.appendChild(colorDiv);
+  }
+
+  function createTool(icon, action) {
+    const toolDiv = document.createElement('div');
+    toolDiv.className = 'tool';
+    toolDiv.innerHTML = icon;
+    toolDiv.addEventListener('click', action);
+    toolsContainer.appendChild(toolDiv);
+  }
+
+  function paintPixel() {
+    if (event.buttons === 1) {
+      event.target.style.backgroundColor = selectedColor;
+    }
+  }
+
+  function selectColor(color) {
+    selectedColor = color;
+  }
+
+  function clearCanvas() {
+    const pixels = document.querySelectorAll('.pixel');
+    pixels.forEach(pixel => {
+      pixel.style.backgroundColor = '';
+    });
+  }
+
+  function fillBucket() {
+    const pixels = document.querySelectorAll('.pixel');
+    pixels.forEach(pixel => {
+      pixel.style.backgroundColor = selectedColor;
+    });
+  }
+
+  // Inicjalizacja
+  for (let i = 0; i < 2500; i++) {
+    createPixel();
+  }
+
+  colors.forEach(color => {
+    createColor(color);
+  });
+
+  createTool('🔄', clearCanvas);
+  createTool('🔨', fillBucket);
+</script>
+
+</body>
+</html>
